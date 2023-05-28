@@ -4,7 +4,7 @@ import { PrimaryButton } from "./PrimaryButton";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction
 const meta = {
-  title: "PrimaryButton",
+  title: "Button/PrimaryButton",
   component: PrimaryButton,
   tags: ["autodocs"],
 } satisfies Meta<typeof PrimaryButton>;
