@@ -36,6 +36,7 @@ export interface IRowHeaderTableProperty<T extends IDisplayable>
 const cellsFactory = (value: TTableValue, length: number = 1) => {
   return Array.isArray(value)
     ? [...value, ...new Array(value.length - length)]
+    // なんか new Array(0) でも大丈夫っぽい。。
     : [value, ...new Array(length - 1)];
 };
 
