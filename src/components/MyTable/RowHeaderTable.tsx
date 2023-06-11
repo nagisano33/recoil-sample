@@ -34,9 +34,9 @@ export interface IRowHeaderTableProperty<T extends IDisplayable>
 
 // アロー関数のデフォルト値ありの引数は undefined にしなくても呼び出す側で省略出来る
 const cellsFactory = (value: TTableValue, length: number = 1) => {
+  // new Array(0) 空の配列が生成されるので大丈夫
   return Array.isArray(value)
     ? [...value, ...new Array(value.length - length)]
-    // なんか new Array(0) でも大丈夫っぽい。。
     : [value, ...new Array(length - 1)];
 };
 
