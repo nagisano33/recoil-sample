@@ -7,7 +7,7 @@ export interface IMessage {
   /**
    * ID
    */
-  messageId: number;
+  messageId: string;
 
   /**
    * 種類
