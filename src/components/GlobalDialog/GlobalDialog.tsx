@@ -14,10 +14,10 @@ interface IProps {
 }
 
 /**
- * グローバルな Dialog
+ * メッセージ表示用ダイアログ
  * @returns 関数コンポーネント
  */
-export const GlobalDialog = ({ id }: IProps) => {
+export const MessageDialog = ({ id }: IProps) => {
   const { open, message, action } = useRecoilValue(messageDialogSelector(id));
   const { closeDialog } = useDialog();
 
