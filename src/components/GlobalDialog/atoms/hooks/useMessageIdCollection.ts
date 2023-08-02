@@ -27,5 +27,12 @@ export const useMessageIdCollection = () => {
     []
   );
 
-  return { set, add };
+  /**
+   * ID を削除
+   */
+  const remove = useRecoilCallback(({ set }) => (id: string) => {
+    set(messageIdsState, (prev) => prev.filter((p) => p !== id));
+  });
+
+  return { set, add, remove };
 };
