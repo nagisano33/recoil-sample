@@ -22,7 +22,10 @@ export const useMessageIdCollection = () => {
   const add = useRecoilCallback(
     ({ set }) =>
       (id: string) => {
-        set(messageIdsState, (prev) => [...prev, id]);
+        set(messageIdsState, (prev) => {
+          const set = new Set([...prev, id]);
+          return [...set]
+        });
       },
     []
   );
