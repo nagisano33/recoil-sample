@@ -1,10 +1,12 @@
 import React from "react";
-import { atom } from "recoil";
+import { atomFamily } from "recoil";
 
 /**
- * ダイアログのコンテンツ部分を管理する atom
+ * ダイアログのコンテンツ部分を管理する atomFamily
+ *
+ * @param param メッセージ ID
  */
-export const dialogContentState = atom<React.ReactNode>({
+export const dialogContentState = atomFamily<string, string>({
   key: "dialog.content",
-  default: <></>,
+  default: "",
 });
