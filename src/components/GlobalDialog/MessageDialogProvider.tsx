@@ -1,7 +1,7 @@
 import React from "react";
 import { useRecoilValue } from "recoil";
 import { messageIdsState } from "./atoms/messageIdsState";
-import { GlobalDialog } from "./GlobalDialog";
+import { MessageDialog } from "./MessageDialog";
 
 /**
  * メッセージダイアログ提供コンポーネント
@@ -14,7 +14,7 @@ export const MessageDialogProvider = ({
     <>
       {children}
       {ids.map((id) => (
-        <GlobalDialog id={id} key={id} />
+        <MessageDialog id={id} key={id} />
       ))}
     </>
   );
