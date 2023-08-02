@@ -5,45 +5,36 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { dialogOpenState } from "./atoms/dialogOpenState";
-import { dialogProperty } from "./selectors/dialogProperty";
+import { useRecoilValue } from "recoil";
+import { useDialog } from "./hooks/useDialog";
+import { messageDialogSelector } from "./selectors/messageDialogSelector";
 
 interface IProps {
-  // no props.
+  id: string;
 }
 
 /**
  * グローバルな Dialog
- * @returns
+ * @returns 関数コンポーネント
  */
-export const GlobalDialog = ({ children }: React.PropsWithChildren<IProps>) => {
-  const setShouldOpenDialog = useSetRecoilState(dialogOpenState);
-
-  const { shouldOpen, title, contents, actions } =
-    useRecoilValue(dialogProperty);
+export const GlobalDialog = ({ id }: IProps) => {
+  const { open, message, action } = useRecoilValue(messageDialogSelector(id));
+  const { closeDialog } = useDialog();
 
   return (
-    <div>
-      <Dialog
-        open={shouldOpen}
-        onClose={() => setShouldOpenDialog(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {title}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {contents}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          {actions}
-        </DialogActions>
-      </Dialog>
-      {children}
-    </div>
+    <Dialog
+      open={open}
+      onClose={() => closeDialog(id)}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">{message?.messageType}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          {message?.content}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>{action}</DialogActions>
+    </Dialog>
   );
 };
