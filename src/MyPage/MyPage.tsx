@@ -10,6 +10,12 @@ import {
 } from "../components/MyTable/RowHeaderTable";
 import { useDialog } from "../components/GlobalDialog/hooks/useDialog";
 import { Button } from "@mui/material";
+import yup from "../yupConfig";
+import i18next from "../i18nextConfig";
+import { ValidationError } from "yup";
+import { MessageDialogProvider } from "../components/GlobalDialog/MessageDialogProvider";
+import { IMessage } from "../components/GlobalDialog/interfaces/IMessage";
+import { useMessageRegistration } from "../components/GlobalDialog/hooks/useMessageRegistration";
 
 const StyledDiv = styled.div`
   height: 100vh;
@@ -24,6 +30,12 @@ interface ITest extends IDisplayable {
   description?: string;
 }
 
+const messages: IMessage[] = [
+  { messageId: "1", messageType: "error", content: "エラーだよ" },
+  { messageId: "2", messageType: "warning", content: "注意だよ" },
+  { messageId: "3", messageType: "info", content: "お知らせ" },
+];
+
 /**
  * ページ
  * @returns 関数コンポーネント
@@ -31,55 +43,45 @@ interface ITest extends IDisplayable {
 export const MyPage = () => {
   const themeCss = useRecoilValue(ThemeCss);
 
-  const { openDialog, closeDialog, setTitle, setContents, setActions } =
-    useDialog();
+  const { t, changeLanguage } = i18next;
 
-  /**
-   * テストなので簡易的だが、ちゃんと書くならここをカスタムフックにすると良さそう
-   * その場合は useDialog の openDialog と closeDialog だけを返すと良い
-   */
+  const { openDialog, closeDialog, setActions } = useDialog();
+
+  const { register } = useMessageRegistration();
+
   useEffect(() => {
-    setTitle("test");
-    setContents(
-      <>
-        <h3>global dialog desu</h3>
-        <p>nakanaka een chauka</p>
-      </>
-    );
-    setActions(
-      <>
-        <Button onClick={() => alert("test desu")}>OK</Button>
-        <Button onClick={() => closeDialog()}>Cancel</Button>
-      </>
-    );
+    // API から messages がとれた想定
+    messages.forEach((message) => {
+      register(message);
+      openDialog(message.messageId);
+    });
   }, []);
 
   return (
-    <StyledDiv theme={themeCss}>
-      MyPage
-      <div>
-        <Button onClick={openDialog}>open global dialog</Button>
-      </div>
-      <div>
-        <Control />
-      </div>
-      <div>
-        <Introduction />
-      </div>
-      <div style={{ width: "40%" }}>
-        <RowHeaderTable<ITest>
-          headerType={"row"}
-          // ここに渡す順番で表示が変わる
-          // rows={{ id: 1, data: ["hoge", "fuga", "piyo"], name: "hoge" }}
-          rows={{ id: 1, name: "hoge" }}
-          titles={{
-            id: "ID",
-            name: "名前",
-            data: "データ",
-            description: "説明",
-          }}
-        />
-      </div>
-    </StyledDiv>
+    <MessageDialogProvider>
+      <StyledDiv theme={themeCss}>
+        MyPage
+        <div>
+          <Control />
+        </div>
+        <div>
+          <Introduction />
+        </div>
+        <div style={{ width: "40%" }}>
+          <RowHeaderTable<ITest>
+            headerType={"row"}
+            // ここに渡す順番で表示が変わる
+            // rows={{ id: 1, data: ["hoge", "fuga", "piyo"], name: "hoge" }}
+            rows={{ id: 1, name: "hoge" }}
+            titles={{
+              id: "ID",
+              name: "名前",
+              data: "データ",
+              description: "説明",
+            }}
+          />
+        </div>
+      </StyledDiv>
+    </MessageDialogProvider>
   );
 };
