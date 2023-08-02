@@ -3,12 +3,19 @@ import { useDialogOpenState } from "./useDialogOpenState";
 import { dialogActionState } from "../dialogActionState";
 import { Button } from "@mui/material";
 import { ReactNode } from "react";
+import { useMessageIdCollection } from "./useMessageIdCollection";
 
 /**
  * ダイアログのアクション部分を管理するカスタムフック
  */
 export const useDialogAction = () => {
   const { close } = useDialogOpenState();
+  const messageIds = useMessageIdCollection();
+
+  const defaultCloseHandler = (id: string) => {
+    close(id);
+    messageIds.remove(id);
+  };
 
   /**
    * デフォルトをセットする
@@ -20,7 +27,7 @@ export const useDialogAction = () => {
       (id: string) => {
         set(
           dialogActionState(id),
-          <Button onClick={() => close(id)}>OK</Button>
+          <Button onClick={() => defaultCloseHandler(id)}>OK</Button>
         );
       },
     []
