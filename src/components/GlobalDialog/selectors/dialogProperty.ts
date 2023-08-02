@@ -1,8 +1,8 @@
-import { selector } from "recoil";
+import { selectorFamily } from "recoil";
 import { dialogOpenState } from "../atoms/dialogOpenState";
-import { dialogTitleState } from "../atoms/dialogTitleState";
 import { dialogContentState } from "../atoms/dialogContentState";
 import { dialogActionState } from "../atoms/dialogActionState";
+import { dialogTitleState } from "../atoms/dialogTitleState";
 
 interface IDialogProperty {
   /**
@@ -18,7 +18,7 @@ interface IDialogProperty {
   /**
    * コンテンツ
    */
-  contents: React.ReactNode;
+  contents: string;
 
   /**
    * フッターコントロール
@@ -28,15 +28,19 @@ interface IDialogProperty {
 
 /**
  * ダイアログのプロパティを返すセレクタ
+ * 
+ * @param param メッセージ ID
  */
-export const dialogProperty = selector<IDialogProperty>({
+export const dialogProperty = selectorFamily<IDialogProperty, string>({
   key: "dialog.property",
-  get: ({ get }) => {
-    const shouldOpen = get(dialogOpenState);
-    const title = get(dialogTitleState);
-    const contents = get(dialogContentState);
-    const actions = get(dialogActionState);
+  get:
+    (id: string) =>
+    ({ get }) => {
+      const shouldOpen = get(dialogOpenState(id));
+      const title = get(dialogTitleState(id));
+      const contents = get(dialogContentState(id));
+      const actions = get(dialogActionState(id));
 
-    return { shouldOpen, title, contents, actions };
-  },
+      return { shouldOpen, title, contents, actions };
+    },
 });
