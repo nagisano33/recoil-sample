@@ -17,6 +17,7 @@ import { MessageDialogProvider } from "../components/GlobalDialog/MessageDialogP
 import { IMessage } from "../components/GlobalDialog/interfaces/IMessage";
 import { useMessageRegistration } from "../components/GlobalDialog/hooks/useMessageRegistration";
 import axios from "axios";
+import { useUserFetcher } from "./hooks/useUserFetcher";
 
 const StyledDiv = styled.div`
   height: 100vh;
@@ -44,20 +45,11 @@ const messages: IMessage[] = [
 export const MyPage = () => {
   const themeCss = useRecoilValue(ThemeCss);
 
-  const { t, changeLanguage } = i18next;
-
-  const { openDialog, closeDialog, setActions } = useDialog();
-
-  const { register } = useMessageRegistration();
+  const userFetcher = useUserFetcher();
 
   useEffect(() => {
-    axios.get("user?id=1").then((response) => {
-      console.log(response.data.username);
-    });
-    // API から messages がとれた想定
-    messages.forEach((message) => {
-      register(message);
-      openDialog(message.messageId);
+    userFetcher.execute().then((user) => {
+      console.log("username:", user.username);
     });
   }, []);
 
