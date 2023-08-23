@@ -16,6 +16,7 @@ import { ValidationError } from "yup";
 import { MessageDialogProvider } from "../components/GlobalDialog/MessageDialogProvider";
 import { IMessage } from "../components/GlobalDialog/interfaces/IMessage";
 import { useMessageRegistration } from "../components/GlobalDialog/hooks/useMessageRegistration";
+import axios from "axios";
 
 const StyledDiv = styled.div`
   height: 100vh;
@@ -50,6 +51,9 @@ export const MyPage = () => {
   const { register } = useMessageRegistration();
 
   useEffect(() => {
+    axios.get("user?id=1").then((response) => {
+      console.log(response.data.username);
+    });
     // API から messages がとれた想定
     messages.forEach((message) => {
       register(message);
